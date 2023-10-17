@@ -6,7 +6,7 @@
 /*   By: elakhfif <elakhfif@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 18:12:19 by elakhfif          #+#    #+#             */
-/*   Updated: 2023/10/17 18:29:33 by elakhfif         ###   ########.fr       */
+/*   Updated: 2023/10/17 21:06:39 by elakhfif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	ps_light(t_scene *scne, char **params)
 	if (NOPARAM)
 		perror("Error: invalid light!");
 	new = alloc_light(scne);
-	new->cen = get_vec(params[1]);
+	new->src = get_vec(params[1]);
 	new->ratio = ft_atod(params[2]);
 	if (new->ratio < 0 || new->ratio > 1)
 		perror("Error: light ratio must be in range [0.0 , 1.0]");

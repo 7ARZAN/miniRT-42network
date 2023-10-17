@@ -6,7 +6,7 @@
 /*   By: elakhfif <elakhfif@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 17:31:15 by elakhfif          #+#    #+#             */
-/*   Updated: 2023/10/17 18:30:07 by elakhfif         ###   ########.fr       */
+/*   Updated: 2023/10/17 21:09:03 by elakhfif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_vec	get_color(char *str)
 		perror("Error: Wrong color format\n");
 		exit(0);
 	}
-	color = (t_vec){ft_atof(params[0]), ft_atof(params[1]), ft_atof(params[2])};
+	color = (t_vec){ft_atod(params[0]), ft_atod(params[1]), ft_atod(params[2])};
 	if (color.x < 0 || color.x > 255 || color.y < 0 || color.y > 255
 		|| color.z < 0 || color.z > 255)
 	{
@@ -45,7 +45,7 @@ t_vec	get_vec(char *str)
 		perror("Error: Wrong vector format\n");
 		exit(0);
 	}
-	vec = (t_vec){ft_atof(params[0]), ft_atof(params[1]), ft_atof(params[2])};
+	vec = (t_vec){ft_atod(params[0]), ft_atod(params[1]), ft_atod(params[2])};
 	free_split(params);
 	return (vec);
 }
@@ -66,7 +66,7 @@ void	parse_line(char *id, char **params, t_scene *scne)
 		ps_cylinder(scne, params);
 	else
 	{
-		ft_putstr_fd("Error: Wrong identifier\n", 2);
+		perror("Error: Wrong identifier\n");
 		exit(0);
 	}
 }
