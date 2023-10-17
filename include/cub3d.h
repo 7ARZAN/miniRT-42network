@@ -6,15 +6,12 @@
 /*   By: elakhfif <elakhfif@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 12:46:40 by elakhfif          #+#    #+#             */
-/*   Updated: 2023/10/16 12:47:51 by elakhfif         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:38:28 by elakhfif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-
-# include "./parsing.h"
-# include "./raycasting.h"
 
 
 
