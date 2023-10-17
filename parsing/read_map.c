@@ -6,10 +6,10 @@
 /*   By: elakhfif <elakhfif@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 14:30:22 by elakhfif          #+#    #+#             */
-/*   Updated: 2023/10/16 14:30:38 by elakhfif         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:36:03 by elakhfif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/parsing.h"
+#include "../include/cub3d.h"
 
 

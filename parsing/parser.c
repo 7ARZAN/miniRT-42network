@@ -6,8 +6,8 @@
 /*   By: elakhfif <elakhfif@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 12:42:54 by elakhfif          #+#    #+#             */
-/*   Updated: 2023/10/16 12:43:18 by elakhfif         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:35:47 by elakhfif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/parsing.h"
+#include "../include/cub3d.h"

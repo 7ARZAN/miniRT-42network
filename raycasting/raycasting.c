@@ -6,9 +6,9 @@
 /*   By: elakhfif <elakhfif@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 12:45:45 by elakhfif          #+#    #+#             */
-/*   Updated: 2023/10/16 12:46:01 by elakhfif         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:36:53 by elakhfif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/raycasting.h"
+#include "../include/cub3d.h"
 
