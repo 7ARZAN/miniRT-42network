@@ -6,7 +6,7 @@
 /*   By: elakhfif <elakhfif@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 18:04:55 by elakhfif          #+#    #+#             */
-/*   Updated: 2023/10/17 19:52:14 by elakhfif         ###   ########.fr       */
+/*   Updated: 2024/12/20 23:27:49 by elakhfif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,8 @@ int	ft_strlen(char *str);
 double	take_min(double x, double y);
 double	ft_atod(const char *str);
 int	ft_atoi(const char *str);
+void	ps_sphere(t_scene *scne, char **params);
+void	ps_cylinder(t_scene *scne, char **params);
+void	ps_plane(t_scene *scne, char **params);
 
 #endif

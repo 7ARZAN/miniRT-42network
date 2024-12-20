@@ -6,13 +6,20 @@
 /*   By: elakhfif <elakhfif@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 18:05:47 by elakhfif          #+#    #+#             */
-/*   Updated: 2023/10/17 18:09:18 by elakhfif         ###   ########.fr       */
+/*   Updated: 2024/12/20 23:26:13 by elakhfif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
+typedef enum e_obj_type {
+	SPHERE,
+	PLANE,
+	SQUARE,
+	TRIANGLE,
+	CYLINDER
+}	t_obj_type;
 
 typedef struct s_data {
 	void	*img;

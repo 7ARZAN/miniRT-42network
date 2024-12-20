@@ -6,7 +6,7 @@
 /*   By: elakhfif <elakhfif@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 17:31:15 by elakhfif          #+#    #+#             */
-/*   Updated: 2023/10/17 21:09:03 by elakhfif         ###   ########.fr       */
+/*   Updated: 2024/12/20 23:31:44 by elakhfif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,23 @@ t_vec	get_vec(char *str)
 	return (vec);
 }
 
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	unsigned char	*str1;
+	unsigned char	*str2;
+
+	str1 = (unsigned char *)s1;
+	str2 = (unsigned char *)s2;
+	if (n == 0)
+		return (0);
+	while (*str1 && *str2 && *str1 == *str2 && --n)
+	{
+		str1++;
+		str2++;
+	}
+	return (*str1 - *str2);
+}
+
 void	parse_line(char *id, char **params, t_scene *scne)
 {
 	if (id[0] == 'A' && id[1] == '\0')
@@ -58,11 +75,11 @@ void	parse_line(char *id, char **params, t_scene *scne)
 		ps_camera(scne, params);
 	else if (id[0] == 'L' && id[1] == '\0')
 		ps_light(scne, params);
-	else if (id[0] == 's' && id[1] == 'p' && id[2] == '\0')
+	else if (ft_strncmp(id, "SP", 2) == 0)
 		ps_sphere(scne, params);
-	else if (id[0] == 'p' && id[1] == 'l' && id[2] == '\0')
+	else if (ft_strncmp(id, "PL", 2) == 0)
 		ps_plane(scne, params);
-	else if (id[0] == 'c' && id[1] == 'y' && id[2] == '\0')
+	else if (ft_strncmp(id, "CY", 2) == 0)
 		ps_cylinder(scne, params);
 	else
 	{
