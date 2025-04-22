@@ -12,33 +12,61 @@
 
 #include "../include/minirt.h"
 
+void	*malloc_safe(t_garbage **root, size_t size)
+{
+	void	*ptr;
+
+	ptr = malloc(size);
+	if (!ptr)
+	{
+		perror("Error: Memory allocation failed");
+		exit(1);
+	}
+	append_addr(root, ptr);
+	return (ptr);
+}
+
 t_scene	*alloc_scene(void)
 {
 	t_scene	*scene;
 
-	scene = ft_malloc(&g_root, sizeof(t_scene));
-	if (!scene)
-		return (NULL);
-	scene->objs = NULL;
-	scene->amb.count = 0;
-	scene->cam.count = 0;
-	scene->light = NULL;
+	scene = malloc_safe(NULL, sizeof(t_scene));
+	init_vec(&scene->color);
+	init_vec(&scene->camera.center);
+	init_vec(&scene->camera.direction);
+	scene->camera.fov = 0;
+	scene->camera.count = 0;
+	scene->lights = NULL;
+	scene->ambient.count = 0;
+	scene->objects = NULL;
 	return (scene);
 }
 
-t_objs	*alloc_obj(t_scene *scene)
+t_object	*alloc_object(t_scene *scene)
 {
-	t_objs	*new;
+	t_object	*obj;
 
-	g_root = NULL;
-	new = ft_malloc(&g_root, sizeof(t_objs));
-	if (!new)
-		return (NULL);
-	vctr_init(&(new->col));
-	vctr_init(&(new->cen));
-	vctr_init(&(new->dir));
-	vctr_init(&(new->p));
-	new->next = scene->objs;
-	scene->objs = new;
-	return (new);
+	obj = malloc_safe(NULL, sizeof(t_object));
+	obj->type = SPHERE;
+	init_vec(&obj->center);
+	init_vec(&obj->direction);
+	init_vec(&obj->params);
+	init_vec(&obj->color);
+	init_vec(&obj->normal);
+	obj->next = scene->objects;
+	scene->objects = obj;
+	return (obj);
+}
 
+t_light	*alloc_light(t_scene *scene)
+{
+	t_light	*light;
+
+	light = malloc_safe(NULL, sizeof(t_light));
+	init_vec(&light->source);
+	light->ratio = 0;
+	init_vec(&light->color);
+	light->next = scene->lights;
+	scene->lights = light;
+	return (light);
+}

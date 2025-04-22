@@ -12,37 +12,37 @@
 
 #include "../include/minirt.h"
 
-t_vec	sub_vec(t_vec v1, t_vec v2)
+t_vec	subtract_vec(t_vec v1, t_vec v2)
 {
-	t_vec	v;
+	t_vec	result;
 
-	v.x = v1.x - v2.x;
-	v.y = v1.y - v2.y;
-	v.z = v1.z - v2.z;
-	return (v);
+	result.x = v1.x - v2.x;
+	result.y = v1.y - v2.y;
+	result.z = v1.z - v2.z;
+	return (result);
 }
 
-double	module_vec(t_vec v)
+double	magnitude_vec(t_vec v)
 {
-	return (sqrt(pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2)));
+	return (sqrtf(v.x * v.x + v.y * v.y + v.z * v.z));
 }
 
-t_vec	div_vec(t_vec v, double d)
+t_vec	divide_vec(t_vec v, double d)
 {
-	t_vec	v1;
+	t_vec	result;
 
-	v1.x = v.x / d;
-	v1.y = v.y / d;
-	v1.z = v.z / d;
-	return (v1);
+	result.x = v.x / d;
+	result.y = v.y / d;
+	result.z = v.z / d;
+	return (result);
 }
 
-t_vec	make_vec(double x, double y, double z)
+t_vec	create_vec(double x, double y, double z)
 {
-	t_vec	v;
+	t_vec	result;
 
-	v.x = x;
-	v.y = y;
-	v.z = z;
-	return (v);
+	result.x = x;
+	result.y = y;
+	result.z = z;
+	return (result);
 }

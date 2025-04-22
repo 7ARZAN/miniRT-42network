@@ -10,21 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./include/minirt.h"
+#include "include/minirt.h"
 
 int	main(int ac, char **av)
 {
-	t_scene	*scne;
-	int	fd;
+	t_scene		*scene;
+	t_garbage	**root;
+	int			fd;
 
+	root = append_addr(NULL, NULL);
 	if (check_file(ac, av))
-		perror("hey dummy enter a valid file ex: [meme.rt]");
+	{
+		perror("Error: Invalid file (e.g., scene.rt)");
+		return (1);
+	}
 	fd = open(av[1], O_RDONLY);
-	scne = alloc_scene();
-	if (!scne)
-		perror("somehow you can't allocate memory");
-	parser(scne, fd);
-	//render(scne); -need to be implemented
-	//collect_data(&g_root, g_root); -need to fix it !
+	if (fd < 0)
+	{
+		perror("Error: Cannot open file");
+		return (1);
+	}
+	scene = alloc_scene();
+	parse_scene(scene, fd);
+	render_scene(scene);
+	free_memory(root);
 	return (0);
 }

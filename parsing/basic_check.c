@@ -17,20 +17,14 @@ int	check_file(int ac, char **av)
 	int	i;
 	int	fd;
 
-	fd = 0;
 	if (ac != 2 || !av[1])
 		return (1);
-	i = ft_strlen(av[1]);
-	if (i < 4)
+	i = string_length(av[1]);
+	if (i < 4 || av[1][i - 1] != 't' || av[1][i - 2] != 'r' || av[1][i - 3] != '.')
 		return (1);
-	if (av[1][i - 1] != 't' || av[1][i - 2] != 'r' || av[1][i - 3] != '.')
-	{
-		fd = open(av[1], O_RDONLY);
-		if (fd == -1)
-			return (1);
-		close(fd);
-	}
-	else
+	fd = open(av[1], O_RDONLY);
+	if (fd < 0)
 		return (1);
+	close(fd);
 	return (0);
 }

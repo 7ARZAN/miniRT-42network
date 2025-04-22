@@ -12,66 +12,77 @@
 
 #include "../include/minirt.h"
 
-t_collector	*new_node(void *addr)
+t_garbage	*new_node(void *addr)
 {
-	t_collector	*node;
+	t_garbage	*node;
 
-	node = (t_collector *)malloc(sizeof(t_collector));
+	node = malloc(sizeof(t_garbage));
 	if (!node)
-		return (NULL);
-	node->adr = addr;
+	{
+		perror("Error: Garbage node allocation failed");
+		exit(1);
+	}
+	node->address = addr;
 	node->next = NULL;
 	return (node);
 }
 
-t_collector	**append_addr(t_collector **g_root, void *addr)
+t_garbage	**append_addr(t_garbage **root, void *addr)
 {
-	t_collector	*node;
+	t_garbage	*node;
 
-	node = new_node(addr);
-	if (!node)
-		return (NULL);
-	if (!*g_root)
-		*g_root = node;
-	else
+	if (!root)
+		root = malloc(sizeof(t_garbage *));
+	if (!root)
 	{
-		node->next = *g_root;
-		*g_root = node;
-	}
-	return (g_root);
-}
-
-void	free_memory(t_collector **g_root)
-{
-	t_collector	*tmp;
-
-	while (*g_root)
-	{
-		tmp = *g_root;
-		*g_root = (*g_root)->next;
-		free(tmp->adr);
-		free(tmp);
-	}
-}
-
-void	ft_malloc(t_collector **g_root, size_t size)
-{
-	void	*ptr;
-
-	ptr = malloc(size);
-	if (!ptr)
-	{
-		free_memory(g_root);
+		perror("Error: Garbage root allocation failed");
 		exit(1);
 	}
-	append_addr(g_root, ptr);
+	*root = NULL;
+	node = new_node(addr);
+	node->next = *root;
+	*root = node;
+	return (root);
 }
 
-void	ft_collect(t_collector **g_root, t_collector *node)
+void	collect_node(t_garbage **root, t_garbage *node)
 {
-	if(!node)
+	t_garbage	*current;
+	t_garbage	*prev;
+
+	if (!root || !*root)
 		return ;
-	ft_collect(g_root, node->next);
-	free(node->adr);
-	free(node);
+	current = *root;
+	prev = NULL;
+	while (current && current != node)
+	{
+		prev = current;
+		current = current->next;
+	}
+	if (!current)
+		return ;
+	if (prev)
+		prev->next = current->next;
+	else
+		*root = current->next;
+	free(current);
+}
+
+void	free_memory(t_garbage **root)
+{
+	t_garbage	*current;
+	t_garbage	*next;
+
+	if (!root || !*root)
+		return ;
+	current = *root;
+	while (current)
+	{
+		next = current->next;
+		if (current->address)
+			free(current->address);
+		free(current);
+		current = next;
+	}
+	*root = NULL;
 }

@@ -12,58 +12,43 @@
 
 #include "../include/minirt.h"
 
-t_light	*alloc_light(t_scene *scne)
+void	parse_ambient(t_scene *scene, char **params)
 {
-	t_light	*new;
-
-	new = (t_light *)malloc(sizeof(t_light));
-	if (!new)
-		perror("Error: malloc failed\n");
-	new->next = scne->light;
-	scne->light = new;
-	return (new);
+	if (!params || !params[1] || !params[2])
+		perror("Error: Invalid ambient parameters");
+	if (scene->ambient.count != 0)
+		perror("Error: Multiple ambient lights defined");
+	scene->ambient.count++;
+	scene->ambient.ratio = string_to_double(params[1]);
+	if (scene->ambient.ratio < 0 || scene->ambient.ratio > 1)
+		perror("Error: Ambient ratio must be in [0.0, 1.0]");
+	scene->ambient.color = get_color(params[2]);
 }
 
-void	ps_ambient(t_scene *scne, char **params)
+void	parse_camera(t_scene *scene, char **params)
 {
-	if (NOPARAM)
-		perror("Error: invalid ambient!");
-	if (scne->amb.count != 0)
-		perror("Error: too many ambient");
-	scne->amb.count++;
-	scne->amb.ratio = ft_atod(params[1]);
-	if (scne->amb.ratio < 0 || scne->amb.ratio > 1)
-		perror("enter ambient lighting ration in range [0.0 , 1.0]");
-	scne->amb.col = get_color(params[2]);
+	if (!params || !params[1] || !params[2] || !params[3])
+		perror("Error: Invalid camera parameters");
+	if (scene->camera.count != 0)
+		perror("Error: Multiple cameras defined");
+	scene->camera.count++;
+	scene->camera.center = get_vector(params[1]);
+	scene->camera.direction = normalize_vec(get_vector(params[2]));
+	scene->camera.fov = string_to_int(params[3]);
+	if (scene->camera.fov < 0 || scene->camera.fov > 180)
+		perror("Error: Camera FOV must be in [0, 180]");
 }
 
-void	ps_camera(t_scene *scne, char **params)
+void	parse_light(t_scene *scene, char **params)
 {
-	if (NOPARAM)
-		perror("Error: invalid camera!");
-	if (scne->cam.count != 0)
-		perror("Error: too many camera");
-	scne->cam.count++;
-	scne->cam.cen = get_vec(params[1]);
-	scne->cam.dir = get_vec(params[2]);
-	if (scne->cam.dir.x > 1 || scne->cam.dir.x < -1 || scne->cam.dir.y > 1
-		|| scne->cam.dir.y < -1 || scne->cam.dir.z > 1 || scne->cam.dir.z < -1)
-		perror("Error: camera direction must be normalized");
-	scne->cam.fov = ft_atoi(params[3]);
-	if (scne->cam.fov < 0 || scne->cam.fov > 180)
-		perror("Error: camera fov must be in range [0 , 180]");
-}
+	t_light	*light;
 
-void	ps_light(t_scene *scne, char **params)
-{
-	t_light	*new;
-
-	if (NOPARAM)
-		perror("Error: invalid light!");
-	new = alloc_light(scne);
-	new->src = get_vec(params[1]);
-	new->ratio = ft_atod(params[2]);
-	if (new->ratio < 0 || new->ratio > 1)
-		perror("Error: light ratio must be in range [0.0 , 1.0]");
-	new->col = get_color(params[3]);
+	if (!params || !params[1] || !params[2] || !params[3])
+		perror("Error: Invalid light parameters");
+	light = alloc_light(scene);
+	light->source = get_vector(params[1]);
+	light->ratio = string_to_double(params[2]);
+	if (light->ratio < 0 || light->ratio > 1)
+		perror("Error: Light ratio must be in [0.0, 1.0]");
+	light->color = get_color(params[3]);
 }

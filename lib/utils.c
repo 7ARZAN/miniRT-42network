@@ -12,27 +12,69 @@
 
 #include "../include/minirt.h"
 
-void	free_split(char **split)
+int	string_length(char *str)
 {
-	int	i;
+	int	len;
 
-	i = 0;
-	while (split[i])
-	{
-		free(split[i]);
-		i++;
-	}
-	free(split);
+	if (!str)
+		return (0);
+	len = 0;
+	while (str[len])
+		len++;
+	return (len);
 }
 
-int	ft_strlen(char *str)
+double	string_to_double(const char *str)
 {
+	double	result;
+	int		sign;
+	int		i;
+	double	frac;
+
+	if (!str)
+		return (0);
+	result = 0;
+	sign = 1;
+	i = 0;
+	if (str[i] == '-')
+	{
+		sign = -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+		result = result * 10 + (str[i++] - '0');
+	if (str[i] == '.')
+	{
+		i++;
+		frac = 0.1;
+		while (str[i] >= '0' && str[i] <= '9')
+		{
+			result += (str[i++] - '0') * frac;
+			frac *= 0.1;
+		}
+	}
+	return (result * sign);
+}
+
+int	string_to_int(const char *str)
+{
+	int	result;
+	int	sign;
 	int	i;
 
+	if (!str)
+		return (0);
+	result = 0;
+	sign = 1;
 	i = 0;
-	while (str && str[i])
+	if (str[i] == '-')
+	{
+		sign = -1;
 		i++;
-	return (i);
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+		result = result * 10 + (str[i++] - '0');
+	return (result * sign);
 }
 
 double	take_min(double x, double y)
@@ -40,51 +82,4 @@ double	take_min(double x, double y)
 	if (x < y)
 		return (x);
 	return (y);
-}
-
-double	ft_atod(const char *str)
-{
-	double	nb;
-	int		i;
-	int	sign;
-	int	aux;
-
-	i = 0;
-	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
-		++i;
-	sign = 1;
-	if (str[i] == '-' || str[i] == '+')
-		if (str[i++] == '-')
-			sign = -1;
-	nb = 0;
-	while (str[i] >= '0' && str[i] <= '9')
-		nb = nb * 10 + (str[i++] - '0');
-	if (str[i] == '.')
-		return ((double)nb * sign);
-	aux = 10;
-	while (str[++i] >= '0' && str[i] <= '9')
-	{
-		nb += (double)(str[i] - '0') / aux;
-		aux *= 10;
-	}
-	return ((double)nb * sign);
-}
-
-int	ft_atoi(const char *str)
-{
-	int	nb;
-	int	i;
-	int	sign;
-
-	i = 0;
-	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
-		++i;
-	sign = 1;
-	if (str[i] == '-' || str[i] == '+')
-		if (str[i++] == '-')
-			sign = -1;
-	nb = 0;
-	while (str[i] >= '0' && str[i] <= '9')
-		nb = nb * 10 + (str[i++] - '0');
-	return (nb * sign);
 }

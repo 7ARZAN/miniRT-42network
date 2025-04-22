@@ -12,105 +12,67 @@
 
 #include "../include/minirt.h"
 
-static int	ft_strlcpy(char *dst, const char *src, int dstsize)
+static int	count_words(const char *s, char c)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	if (!dst || !src)
-		return (0);
-	while (src[j])
-		j++;
-	if (dstsize == 0)
-		return (j);
-	while (src[i] && i < dstsize - 1)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = 0;
-	return (j);
-}
-
-static int	wrds_count(const char *str, char sep)
-{
-	int	i;
 	int	count;
 
-	i = 0;
 	count = 0;
-	while (str[i])
+	while (*s)
 	{
-		if (str[i] != sep)
+		if (*s != c)
 		{
 			count++;
-			while (str[i] != sep && str[i])
-				i++;
+			while (*s && *s != c)
+				s++;
 		}
 		else
-			i++;
+			s++;
 	}
 	return (count);
 }
 
-static char	*wrd_malloc(const char *str, char sep)
+char	**split_string(const char *s, char c)
 {
+	char	**result;
 	int		i;
-	char	*word;
+	int		start;
+	int		words;
 
-	i = 0;
-	while (str[i] != sep && str[i])
-		i++;
-	word = (char *)malloc(sizeof(char) * (i + 1));
-	if (!word)
+	if (!s)
 		return (NULL);
-	ft_strlcpy(word, str, i + 1);
-	return (word);
+	words = count_words(s, c);
+	result = malloc_safe(NULL, (words + 1) * sizeof(char *));
+	if (!result)
+		return (NULL);
+	i = 0;
+	while (*s && i < words)
+	{
+		while (*s == c)
+			s++;
+		start = 0;
+		while (s[start] && s[start] != c)
+			start++;
+		result[i] = malloc_safe(NULL, start + 1);
+		strncpy(result[i], s, start);
+		result[i][start] = '\0';
+		s += start;
+		i++;
+	}
+	result[i] = NULL;
+	return (result);
 }
 
-static char	**remove_leaks(char **buff)
+void	free_split(char **split)
 {
 	int	i;
 
+	if (!split)
+		return ;
 	i = 0;
-	while (buff[i])
+	while (split[i])
 	{
-		free(buff[i]);
+		free(split[i]);
 		i++;
 	}
-	free(buff);
-	return (NULL);
-}
-
-char	**ohmysplit(char const *s, char c)
-{
-	int		i;
-	int		j;
-	char	**buff;
-
-	i = 0;
-	j = 0;
-	if (!s)
-		return (NULL);
-	buff = (char **)malloc(sizeof(char *) * (wrds_count(s, c) + 1));
-	if (!buff)
-		return (NULL);
-	while (s[i])
-	{
-		if (s[i] != c)
-		{
-			buff[j] = wrd_malloc(s + i, c);
-			if (!buff[j])
-				return (remove_leaks(buff));
-			j++;
-			while (s[i] != c && s[i])
-				i++;
-		}
-		else
-			i++;
-	}
-	buff[j] = NULL;
-	return (buff);
+	free(split);
 }

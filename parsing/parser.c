@@ -17,40 +17,42 @@ t_vec	get_color(char *str)
 	char	**params;
 	t_vec	color;
 
-	params = ohmysplit(str, ',');
-	if (!params || !params[1] || !params[2] || params[3])
+	params = split_string(str, ',');
+	if (!params || !params[0] || !params[1] || !params[2] || params[3])
 	{
-		perror("Error: Wrong color format\n");
-		exit(0);
+		free_split(params);
+		perror("Error: Invalid color format");
+		exit(1);
 	}
-	color = (t_vec){ft_atod(params[0]), ft_atod(params[1]), ft_atod(params[2])};
-	if (color.x < 0 || color.x > 255 || color.y < 0 || color.y > 255
-		|| color.z < 0 || color.z > 255)
+	color = create_vec(string_to_double(params[0]), string_to_double(params[1]), string_to_double(params[2]));
+	if (color.x < 0 || color.x > 255 || color.y < 0 || color.y > 255 || color.z < 0 || color.z > 255)
 	{
-		perror("Error: Wrong color format\n");
-		exit(0);
+		free_split(params);
+		perror("Error: Color values must be in [0, 255]");
+		exit(1);
 	}
 	free_split(params);
 	return (color);
 }
 
-t_vec	get_vec(char *str)
+t_vec	get_vector(char *str)
 {
 	char	**params;
-	t_vec	vec;
+	t_vec	vector;
 
-	params = ohmysplit(str, ',');
-	if (NOPARAM)
+	params = split_string(str, ',');
+	if (!params || !params[0] || !params[1] || !params[2] || params[3])
 	{
-		perror("Error: Wrong vector format\n");
-		exit(0);
+		free_split(params);
+		perror("Error: Invalid vector format");
+		exit(1);
 	}
-	vec = (t_vec){ft_atod(params[0]), ft_atod(params[1]), ft_atod(params[2])};
+	vector = create_vec(string_to_double(params[0]), string_to_double(params[1]), string_to_double(params[2]));
 	free_split(params);
-	return (vec);
+	return (vector);
 }
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+static int	compare_strings(const char *s1, const char *s2, size_t n)
 {
 	unsigned char	*str1;
 	unsigned char	*str2;
@@ -67,38 +69,41 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (*str1 - *str2);
 }
 
-void	parse_line(char *id, char **params, t_scene *scne)
+void	parse_line(char *id, char **params, t_scene *scene)
 {
 	if (id[0] == 'A' && id[1] == '\0')
-		ps_ambient(scne, params);
+		parse_ambient(scene, params);
 	else if (id[0] == 'C' && id[1] == '\0')
-		ps_camera(scne, params);
+		parse_camera(scene, params);
 	else if (id[0] == 'L' && id[1] == '\0')
-		ps_light(scne, params);
-	else if (ft_strncmp(id, "SP", 2) == 0)
-		ps_sphere(scne, params);
-	else if (ft_strncmp(id, "PL", 2) == 0)
-		ps_plane(scne, params);
-	else if (ft_strncmp(id, "CY", 2) == 0)
-		ps_cylinder(scne, params);
+		parse_light(scene, params);
+	else if (compare_strings(id, "sp", 2) == 0)
+		parse_sphere(scene, params);
+	else if (compare_strings(id, "pl", 2) == 0)
+		parse_plane(scene, params);
+	else if (compare_strings(id, "cy", 2) == 0)
+		parse_cylinder(scene, params);
 	else
 	{
-		perror("Error: Wrong identifier\n");
-		exit(0);
+		perror("Error: Invalid identifier");
+		exit(1);
 	}
 }
 
-void	parser(t_scene *scne, int fd)
+void	parse_scene(t_scene *scene, int fd)
 {
 	char	**params;
+	char	*line;
 
 	while (1)
 	{
-		params = ohmysplit(gnl(fd), ' ');
-		if (params == NULL)
+		line = get_next_line(fd);
+		if (!line)
 			break ;
-		if (*params)
-			parse_line(*params, params, scne);
+		params = split_string(line, ' ');
+		free(line);
+		if (params && params[0])
+			parse_line(params[0], params, scene);
 		free_split(params);
 	}
 	close(fd);

@@ -12,41 +12,28 @@
 
 #include "../include/minirt.h"
 
-static char	*ft_strjoin(char *s, char c)
+char	*get_next_line(int fd)
 {
-	char	*output;
+	char	*line;
+	char	buf[1024];
 	int		i;
+	int		bytes;
 
-	i = 2;
-	if (s)
-		while (*s && s++)
-			i++;
-	output = (char *)malloc(sizeof(char) * i);
-	output[--i] = '\0';
-	output[--i] = c;
-	if (s)
+	line = malloc_safe(NULL, 1024);
+	if (!line)
+		return (NULL);
+	i = 0;
+	while ((bytes = read(fd, buf, 1)) > 0 && i < 1023)
 	{
-		while (i--)
-			output[i] = s[i];
-		free(s - 1);
+		if (buf[0] == '\n')
+			break ;
+		line[i++] = buf[0];
 	}
-	return (output);
-}
-
-char	*gnl(int fd)
-{
-	char	c;
-	static char	*str;
-
-	str = NULL;
-	if (str)
-		free(str);
-	str = NULL;
-	while (read(fd, &c, 1) && (c != '\n' || !str))
+	if (i == 0 && bytes <= 0)
 	{
-		if (c == '\n')
-			continue ;
-		str = ft_strjoin(str, c);
+		free(line);
+		return (NULL);
 	}
-	return (str);
+	line[i] = '\0';
+	return (line);
 }

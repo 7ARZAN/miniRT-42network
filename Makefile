@@ -14,7 +14,7 @@ NAME = miniRT
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -Wformat=2 -flto -ffast-math -pedantic -Wunreachable-code -Wfloat-equal -Warray-bounds -ggdb -O3 -ffast=math 
+CFLAGS = -Wall -Wextra -Werror -Wformat=2 -flto -ffast-math -pedantic -O3
 
 OS := $(shell uname -s)
 
@@ -27,39 +27,34 @@ else
 	LIB_DIR = /Users/$(USER)/Library/lib/libmlx42.a
 	GLFW_DIR = /Users/$(USER)/Library/lib/libglfw3.a
 	INC_DIR = -I/Users/$(USER)/Library/includes/
-
 endif
 
-GNL_SRC = lib/gnl.c
-
-OBJ = $(SRC:src/%.c=build/%.o)
-
-SRC = parsing/basic_check.c parsing/parser.c parsing/ps_elmnts.c parsing/ps_objects.c \
+SRC = main.c \
+      parsing/basic_check.c parsing/parser.c parsing/ps_elmnts.c parsing/ps_objects.c \
       raytracing/raytracing.c raytracing/raytracing_utils.c \
-      render/render.c vectors/vec.c vectors/vctr.c main.c\
+      render/render.c vectors/vctr.c vectors/vec.c \
+      lib/allocation.c lib/gb_collector.c lib/gnl.c lib/ohmysplit.c lib/utils.c
 
-INCLUDES = include/minirt.h
+OBJ = $(SRC:%.c=build/%.o)
 
-build/%.o : src/%.c $(INCLUDES)
-	$(CC) $(INC_DIR) $< $(CFLAGS) -c -o $@
+INCLUDES = include/minirt.h include/structs.h
 
-all : build $(NAME)
+build/%.o: %.c $(INCLUDES)
+	@mkdir -p $(dir $@)
+	$(CC) $(INC_DIR) $(CFLAGS) -c $< -o $@
 
-build :
-	if [ -d "build/" ]; then \
-	    echo "[*] - Build folder does exist"; \
-	else \
-		mkdir build; \
-	fi
+all: $(NAME)
 
-$(NAME) : $(OBJ) $(GNL_SRC) $(INCLUDES)
-	$(CC) $(CFLAGS) $(LIB_DIR) $(OBJ) $(GLFW_DIR) $(MLX_FLAGS) $(INC_DIR) $(GNL_SRC) -o $(NAME)
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) $(LIB_DIR) $(GLFW_DIR) $(MLX_FLAGS) $(INC_DIR) -o $(NAME)
 
-clean :
+clean:
 	rm -rf build/
 	rm -rf miniRT.dSYM
 
-fclean : clean
+fclean: clean
 	rm -rf $(NAME)
 
-re : fclean all
+re: fclean all
+
+.PHONY: all clean fclean re
