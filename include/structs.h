@@ -35,7 +35,6 @@ typedef struct s_data
 typedef struct s_vars
 {
 	void	*mlx;
-	void	*win;
 }	t_vars;
 
 typedef struct s_vec

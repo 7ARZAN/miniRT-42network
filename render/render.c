@@ -12,21 +12,15 @@
 
 #include "../include/minirt.h"
 
-static void	*init_mlx(t_vars *vars)
+static void *init_mlx(t_vars *vars)
 {
-	vars->mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
-	if (!vars->mlx)
-	{
-		perror("Error: MLX initialization failed");
-		exit(1);
-	}
-	vars->win = mlx_new_window(vars->mlx, WIDTH, HEIGHT, "miniRT");
-	if (!vars->win)
-	{
-		perror("Error: Window creation failed");
-		exit(1);
-	}
-	return (vars->mlx);
+    vars->mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
+    if (!vars->mlx)
+    {
+        perror("Error: MLX initialization failed");
+        exit(1);
+    }
+    return (vars->mlx);
 }
 
 static t_vec	get_ray_direction(t_scene *scene, int x, int y)
@@ -62,30 +56,27 @@ static void	render_pixel(t_scene *scene, t_img_data *img, int x, int y)
 	mlx_put_pixel(img->img, x, y, pixel);
 }
 
-void	render_scene(t_scene *scene)
+void render_scene(t_scene *scene)
 {
 	t_vars		vars;
 	t_img_data	img;
-	int			x;
-	int			y;
+	int		x;
+	int		y;
 
 	init_mlx(&vars);
 	img.img = mlx_new_image(vars.mlx, WIDTH, HEIGHT);
 	if (!img.img)
 	{
 		perror("Error: Image creation failed");
-		exit(1);
+		mlx_terminate(vars.mlx);
+	        exit(1);
 	}
-	y = 0;
-	while (y < HEIGHT)
+	y = -1;
+	while (++y < HEIGHT)
 	{
-		x = 0;
-		while (x < WIDTH)
-		{
-			render_pixel(scene, &img, x, y);
-			x++;
-		}
-		y++;
+	    x = -1;
+	    while (++x < WIDTH)
+		render_pixel(scene, &img, x, y);
 	}
 	mlx_image_to_window(vars.mlx, img.img, 0, 0);
 	mlx_loop(vars.mlx);

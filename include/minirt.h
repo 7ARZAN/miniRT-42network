@@ -27,7 +27,7 @@
 # include <errno.h>
 # include <limits.h>
 # include <float.h>
-# include <mlx.h>
+# include "MLX42/MLX42.h"
 
 # include "structs.h"
 
